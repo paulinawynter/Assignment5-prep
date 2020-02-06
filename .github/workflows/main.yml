@@ -1,0 +1,22 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Run a multi-line script
+      run: |
+        echo Starting the test:
+        mkdir bin
+        mkdir lib
+        curl https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.5.2/junit-platform-console-standalone-1.5.2.jar -o lib/junit-platform-console-standalone-1.5.2.jar
+        javac -d bin/ src/Calculator.java
+        javac -d bin -cp bin:lib/junit-platform-console-standalone-1.5.2.jar test/*
+        java -jar lib/junit-platform-console-standalone-1.5.2.jar --class-path bin --scan-class-path
